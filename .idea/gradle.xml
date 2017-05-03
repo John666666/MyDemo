@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/breadpointresume" />
             <option value="$PROJECT_DIR$/buglydemo" />
+            <option value="$PROJECT_DIR$/dinghelper" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

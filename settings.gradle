@@ -1,1 +1,1 @@
-include ':app', ':buglydemo', ':breadpointresume'
+include ':app', ':buglydemo', ':breadpointresume', ':dinghelper'
