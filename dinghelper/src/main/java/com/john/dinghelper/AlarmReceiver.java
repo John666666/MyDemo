@@ -73,8 +73,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         //1秒后重新启动锁屏
         handler.sendEmptyMessageDelayed(0, 1000);
-        //10秒后恢复声音
-        handler.sendEmptyMessageDelayed(1, 10000);
+        //20秒后恢复声音
+        handler.sendEmptyMessageDelayed(1, 20000);
     }
 
     /**
