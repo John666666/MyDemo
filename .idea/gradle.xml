@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/breadpointresume" />
             <option value="$PROJECT_DIR$/buglydemo" />
             <option value="$PROJECT_DIR$/dinghelper" />
+            <option value="$PROJECT_DIR$/ipcdemo" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/breadpointresume/breadpointresume.iml" filepath="$PROJECT_DIR$/breadpointresume/breadpointresume.iml" />
       <module fileurl="file://$PROJECT_DIR$/buglydemo/buglydemo.iml" filepath="$PROJECT_DIR$/buglydemo/buglydemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/dinghelper/dinghelper.iml" filepath="$PROJECT_DIR$/dinghelper/dinghelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ipcdemo/ipcdemo.iml" filepath="$PROJECT_DIR$/ipcdemo/ipcdemo.iml" />
     </modules>
   </component>
 </project>
