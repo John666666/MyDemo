@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -22,10 +23,14 @@ import com.john.ipcdemo.provider.MyProvider;
 import com.john.ipcdemo.service.MyMessengerService;
 import com.john.ipcdemo.util.LogUtil;
 
+import java.lang.ref.WeakReference;
+
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
-    private Messenger messenger;
+    private Messenger sendMessenger;
     private IBinderPool binderPool;
+    private MessengerHandler messengerHandler;  //用于接收远程Messenger返回的消息
+    private Messenger receiveMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,10 @@ public class MainActivity extends Activity {
         super.onStart();
         Intent intent = new Intent(MainActivity.this, MyMessengerService.class);
         bindService(intent, messengerConnect, BIND_AUTO_CREATE);
+
+        //用弱引用避免Handler内存泄露, 具体可搜索Handler内存泄露
+        messengerHandler = new MessengerHandler(new WeakReference<MainActivity>(this));
+        receiveMessenger = new Messenger(messengerHandler);
     }
 
     public void clickHandle(View v) {
@@ -48,18 +57,19 @@ public class MainActivity extends Activity {
                 getContentResolver().query(uri, null, null, null, null);
                 break;
             case R.id.btn_messenger:
-                if (messenger == null) {
+                if (sendMessenger == null) {
                     Toast.makeText(this, "远程Messenger服务未绑定", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Message msg = Message.obtain();
                 msg.what = 1;
                 Bundle bundle = new Bundle();
-                bundle.putString("msg", "Hello Messenger");
+                bundle.putString("msg", "My name is JohnLi.");
                 msg.obj = bundle;
+                msg.replyTo = receiveMessenger;
                 try {
-                    messenger.send(msg);
-                    Toast.makeText(this, "Messenger通信完毕", Toast.LENGTH_SHORT).show();
+                    sendMessenger.send(msg);
+                    Toast.makeText(this, "通过Messenger发送到远程", Toast.LENGTH_SHORT).show();
                 } catch (RemoteException e) {
                     LogUtil.e(TAG, "Messenger远程通信异常", e);
                 }
@@ -127,13 +137,29 @@ public class MainActivity extends Activity {
                 return;
             }
             LogUtil.i(TAG, "远程Messenger服务返回binder: " + service);
-            messenger = new Messenger(service);
+            sendMessenger = new Messenger(service);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             LogUtil.i(TAG, "远程Messenger服务断开");
-            messenger = null;
+            sendMessenger = null;
         }
     };
+
+    static class MessengerHandler extends Handler {
+
+        private MainActivity activity;
+
+        public MessengerHandler(WeakReference<MainActivity> activityRef) {
+            this.activity = activityRef.get();
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            String fromRomoteMsg = ((Bundle)msg.obj).getString("msg");
+            LogUtil.i(TAG, "收到远程Messenger回复: "+fromRomoteMsg);
+            Toast.makeText(activity, "远程Messenger回复: "+fromRomoteMsg, Toast.LENGTH_SHORT).show();
+        }
+    }
 }
