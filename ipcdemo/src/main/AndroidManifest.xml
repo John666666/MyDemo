@@ -29,7 +29,12 @@
             android:name=".service.MyMessengerService"
             android:enabled="true"
             android:exported="true"
-            android:process=":messenger"
+            android:process=":messenger" />
+        <service
+            android:name=".service.BindPoolService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote"
             />
     </application>
 

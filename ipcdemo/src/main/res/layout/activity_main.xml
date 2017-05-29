@@ -21,10 +21,18 @@
         />
 
     <Button
-        android:id="@+id/btn_aidl"
+        android:id="@+id/btn_math_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="AIDL通信"
+        android:text="远程加法运算"
+        android:onClick="clickHandle"
+        />
+
+    <Button
+        android:id="@+id/btn_hello"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="远程SayHello"
         android:onClick="clickHandle"
         />
 

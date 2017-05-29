@@ -13,7 +13,11 @@ import android.os.RemoteException;
 import android.view.View;
 import android.widget.Toast;
 
-import com.john.ipcdemo.aidl.IMyAIDLTest;
+import com.john.ipcdemo.aidl.BinderPool;
+import com.john.ipcdemo.aidl.BinderPoolImpl;
+import com.john.ipcdemo.aidl.IBinderPool;
+import com.john.ipcdemo.aidl.IHello;
+import com.john.ipcdemo.aidl.IMathAdd;
 import com.john.ipcdemo.provider.MyProvider;
 import com.john.ipcdemo.service.MyMessengerService;
 import com.john.ipcdemo.util.LogUtil;
@@ -21,7 +25,8 @@ import com.john.ipcdemo.util.LogUtil;
 public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private Messenger messenger;
-    private IMyAIDLTest aidlTest;
+    private IBinderPool binderPool;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,22 +37,18 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         Intent intent = new Intent(MainActivity.this, MyMessengerService.class);
-//        intent.putExtra(MyMessengerService.BIND_CODE_KEY, MyMessengerService.BIND_MESSENGER_CODE);
-//        bindService(intent, messengerConnect, BIND_AUTO_CREATE);
-
-        intent.putExtra(MyMessengerService.BIND_CODE_KEY, MyMessengerService.BIND_AIDL_CODE);
-        bindService(intent, aidlConnect, BIND_AUTO_CREATE);
+        bindService(intent, messengerConnect, BIND_AUTO_CREATE);
     }
 
     public void clickHandle(View v) {
         switch (v.getId()) {
             case R.id.btn_query_all_man:
                 Toast.makeText(this, "provider查询", Toast.LENGTH_SHORT).show();
-                Uri uri = Uri.parse(MyProvider.AUTHORITIES_URI+MyProvider.TABLE_MAN);
+                Uri uri = Uri.parse(MyProvider.AUTHORITIES_URI + MyProvider.TABLE_MAN);
                 getContentResolver().query(uri, null, null, null, null);
                 break;
             case R.id.btn_messenger:
-                if(messenger == null) {
+                if (messenger == null) {
                     Toast.makeText(this, "远程Messenger服务未绑定", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -63,17 +64,45 @@ public class MainActivity extends Activity {
                     LogUtil.e(TAG, "Messenger远程通信异常", e);
                 }
                 break;
-            case R.id.btn_aidl:
-                if(aidlTest == null) {
-                    Toast.makeText(this, "远程AIDL服务未绑定", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                try {
-                    int result = aidlTest.add(1, 5);
-                    Toast.makeText(this, "远程AIDL计算结果: "+result, Toast.LENGTH_SHORT).show();
-                } catch (RemoteException e) {
-                    LogUtil.e(TAG, "AIDL远程接口调用异常", e);
-                }
+            case R.id.btn_math_add:
+                new Thread(() -> {
+                    IBinder binder = BinderPool.getInstance(MainActivity.this).getBinder(BinderPoolImpl.BIND_MATH_ADD_CODE);
+                    if (binder == null) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "未能连接到期望的远程服务", Toast.LENGTH_SHORT).show();
+                        });
+                        return;
+                    }
+                    try {
+                        IMathAdd mathAdd = IMathAdd.Stub.asInterface(binder);
+                        int sum = mathAdd.add(4, 5);
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "远程服务计算结果：" + sum, Toast.LENGTH_SHORT).show();
+                        });
+                    } catch (RemoteException e) {
+                        LogUtil.e(TAG, "AIDL远程接口调用异常", e);
+                    }
+                }).start();
+                break;
+            case R.id.btn_hello:
+                new Thread(() -> {
+                    IBinder helloBinder = BinderPool.getInstance(MainActivity.this).getBinder(BinderPoolImpl.BIND_HELLO_CODE);
+                    if (helloBinder == null) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "未能连接到期望的远程服务", Toast.LENGTH_SHORT).show();
+                        });
+                        return;
+                    }
+                    try {
+                        IHello hello = IHello.Stub.asInterface(helloBinder);
+                        String retStr = hello.sayHello("John");
+                        runOnUiThread(() -> {
+                            Toast.makeText(this, "远程服务返回结果：" + retStr, Toast.LENGTH_SHORT).show();
+                        });
+                    } catch (RemoteException e) {
+                        LogUtil.e(TAG, "AIDL远程接口调用异常", e);
+                    }
+                }).start();
                 break;
             case R.id.btn_test:
                 Toast.makeText(this, "有没有乱码？", Toast.LENGTH_SHORT).show();
@@ -88,43 +117,23 @@ public class MainActivity extends Activity {
             unbindService(messengerConnect);
         } catch (Exception e) {
         }
-        try {
-            unbindService(aidlConnect);
-        } catch (Exception e) {
-        }
     }
 
     ServiceConnection messengerConnect = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            if(service == null) {
-                LogUtil.w(TAG, "未获取到远程binder");
+            if (service == null) {
+                LogUtil.w(TAG, "未获取到远程Messenger");
                 return;
             }
-            LogUtil.i(TAG, "远程Messenger服务返回binder: "+service);
+            LogUtil.i(TAG, "远程Messenger服务返回binder: " + service);
             messenger = new Messenger(service);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             LogUtil.i(TAG, "远程Messenger服务断开");
-        }
-    };
-
-    ServiceConnection aidlConnect = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            if(service == null) {
-                LogUtil.w(TAG, "未获取到远程binder");
-                return;
-            }
-            LogUtil.i(TAG, "远程AIDL服务返回binder: "+service);
-            aidlTest = IMyAIDLTest.Stub.asInterface(service);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            LogUtil.i(TAG, "远程Messenger服务断开");
+            messenger = null;
         }
     };
 }
