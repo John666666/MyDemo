@@ -2,7 +2,9 @@ package com.john.ipcdemo;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 
+import com.john.ipcdemo.service.ServerSocketService;
 import com.john.ipcdemo.util.LogUtil;
 import com.john.ipcdemo.util.ProcessUtils;
 
@@ -21,6 +23,9 @@ public class MyApplication extends Application {
         LogUtil.i(TAG, "onCreate");
         if(ProcessUtils.isMainProcess()) {
             LogUtil.i(TAG, "do somethings only in main process.");
+            //Æô¶¯ServerSocket·þÎñ
+            Intent intent = new Intent(ctx, ServerSocketService.class);
+            startService(intent);
         }
     }
 

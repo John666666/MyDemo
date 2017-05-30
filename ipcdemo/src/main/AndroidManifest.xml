@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.john.ipcdemo">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -34,8 +36,15 @@
             android:name=".service.BindPoolService"
             android:enabled="true"
             android:exported="true"
+            android:process=":remote" />
+        <service
+            android:name=".service.ServerSocketService"
+            android:enabled="true"
+            android:exported="true"
             android:process=":remote"
             />
+
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

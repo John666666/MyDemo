@@ -117,6 +117,10 @@ public class MainActivity extends Activity {
             case R.id.btn_test:
                 Toast.makeText(this, "有没有乱码？", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.btn_socket:
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
