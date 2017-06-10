@@ -15,6 +15,7 @@ public class MainActivity extends Activity  implements View.OnClickListener{
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btn_sqlite).setOnClickListener(this);
+        findViewById(R.id.btn_greenDao).setOnClickListener(this);
 
     }
 
@@ -24,6 +25,10 @@ public class MainActivity extends Activity  implements View.OnClickListener{
         switch (view.getId()) {
             case R.id.btn_sqlite:
                 intent = new Intent(this, SQLiteActiviy.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_greenDao:
+                intent = new Intent(this, GreenDaoActiviy.class);
                 startActivity(intent);
                 break;
         }
