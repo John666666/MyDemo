@@ -5,6 +5,7 @@ import android.app.Application;
 import com.john.mydemo.bean.DaoMaster;
 import com.john.mydemo.bean.DaoSession;
 import com.john.mydemo.db.ProductOpenHelper;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * Created by John on 2017/6/10.
@@ -21,6 +22,13 @@ public class MyApplication extends Application {
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "test_green");
         ProductOpenHelper helper = new ProductOpenHelper(this, "product_green");
         daoSession = new DaoMaster(helper.getWritableDb()).newSession();
+
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
     }
 
     public DaoSession getDaoSession() {
