@@ -21,7 +21,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public final static String CREATE_TABLE_STUDENT = "create table "+TABLE_STUDENT+" (" +
             "id integer primary key autoincrement," +
             "sname text not null," +
-            "age integer default 16 not null" +
+            "age integer default 16 not null," +
             "remark text);";
 
     public final static String UPGRADE_TABLE_STUDENT_1 = "alter table "+TABLE_STUDENT+" add column remark text;";
