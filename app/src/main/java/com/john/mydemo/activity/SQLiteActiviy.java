@@ -75,7 +75,7 @@ public class SQLiteActiviy extends Activity implements View.OnClickListener {
             cv.put("sname", "李雷");
             cv.put("age", System.currentTimeMillis() % 30);
             cv.put("remark", "雍景城" + System.currentTimeMillis() % 30+"号");
-            cv.put("ext", "扩展字段");
+//            cv.put("ext", "扩展字段");
             db.insert(MyDBHelper.TABLE_STUDENT, null, cv);
 
             //after insert auto refresh ui

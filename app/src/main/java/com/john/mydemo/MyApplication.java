@@ -18,16 +18,18 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //这个类此适用于开发环境， 每次升级都重建所有表
-//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "test_green");
-        ProductOpenHelper helper = new ProductOpenHelper(this, "product_green");
-        daoSession = new DaoMaster(helper.getWritableDb()).newSession();
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
+
+        //这个类此适用于开发环境， 每次升级都重建所有表
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "test_green");
+        ProductOpenHelper helper = new ProductOpenHelper(this, "product_green");
+        daoSession = new DaoMaster(helper.getWritableDb()).newSession();
+
         LeakCanary.install(this);
     }
 

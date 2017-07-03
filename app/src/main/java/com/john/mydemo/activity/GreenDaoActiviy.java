@@ -20,7 +20,7 @@ public class GreenDaoActiviy extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sqlite_activiy);
+        setContentView(R.layout.activity_greendao_activiy);
 
         findViewById(R.id.btn_query).setOnClickListener(this);
         findViewById(R.id.btn_add).setOnClickListener(this);
