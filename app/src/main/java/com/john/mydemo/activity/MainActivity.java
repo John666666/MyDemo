@@ -17,7 +17,7 @@ public class MainActivity extends Activity  implements View.OnClickListener{
         findViewById(R.id.btn_sqlite).setOnClickListener(this);
         findViewById(R.id.btn_greenDao).setOnClickListener(this);
         findViewById(R.id.btn_mem_leak).setOnClickListener(this);
-
+        findViewById(R.id.btn_to_take_picture).setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +34,10 @@ public class MainActivity extends Activity  implements View.OnClickListener{
                 break;
             case R.id.btn_mem_leak:
                 intent = new Intent(this, MemLeakActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_to_take_picture:
+                intent = new Intent(this, TakePictureActivity.class);
                 startActivity(intent);
                 break;
         }
