@@ -10,12 +10,12 @@ import android.widget.ImageView;
 
 import com.john.mydemo.R;
 
-import java.io.File;
-
+/**
+ * 调用系统相机拍照
+ */
 public class TakePictureActivity extends Activity implements View.OnClickListener {
 
     public final static int TAKE_PICTURE_SMALL = 10;
-    public final static int TAKE_PICTURE_LARGE = 11;
 
     private ImageView imageView;
 
@@ -31,15 +31,16 @@ public class TakePictureActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        Intent intent = null;
         switch (v.getId()) {
             case R.id.btn_take_picture_small:
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 Bundle bundle = new Bundle();
                 startActivityForResult(intent, TAKE_PICTURE_SMALL, bundle);
                 break;
             case R.id.btn_take_picture_large:
-                // Create the File where the photo should go
-                File photoFile = new File("/sdcard/test.png");
+                intent = new Intent(this, CustomTaskPictureActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -53,9 +54,6 @@ public class TakePictureActivity extends Activity implements View.OnClickListene
                     Bitmap photo = (Bitmap) extras.get("data");
                     imageView.setImageBitmap(photo);
                 }
-                break;
-            case TAKE_PICTURE_LARGE:
-
                 break;
         }
     }
