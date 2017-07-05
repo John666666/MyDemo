@@ -27,7 +27,7 @@
         <activity android:name=".activity.GreenDaoActiviy" />
         <activity android:name=".activity.MemLeakActivity" />
         <activity android:name=".activity.TakePictureActivity" />
-        <activity android:name=".activity.CustomTaskPictureActivity"></activity>
+        <activity android:name=".activity.CustomTakePictureActivity"></activity>
     </application>
 
 </manifest>

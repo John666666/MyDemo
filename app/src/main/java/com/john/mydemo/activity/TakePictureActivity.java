@@ -39,7 +39,7 @@ public class TakePictureActivity extends Activity implements View.OnClickListene
                 startActivityForResult(intent, TAKE_PICTURE_SMALL, bundle);
                 break;
             case R.id.btn_take_picture_large:
-                intent = new Intent(this, CustomTaskPictureActivity.class);
+                intent = new Intent(this, CustomTakePictureActivity.class);
                 startActivity(intent);
                 break;
         }

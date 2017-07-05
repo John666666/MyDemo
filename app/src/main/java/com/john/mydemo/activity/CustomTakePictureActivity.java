@@ -20,8 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class CustomTaskPictureActivity extends Activity {
-    private final static String TAG = "CustomTaskPictureActivity";
+public class CustomTakePictureActivity extends Activity {
+    private final static String TAG = "CustomTakePictureActivity";
     private FrameLayout frameLayout;
     private CameraView cameraView;
     private Button button;
@@ -29,7 +29,7 @@ public class CustomTaskPictureActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_custom_task_picture);
+        setContentView(R.layout.activity_custom_take_picture);
         frameLayout = (FrameLayout) findViewById(R.id.camera_container);
         cameraView = new CameraView(this);
         frameLayout.addView(cameraView);
