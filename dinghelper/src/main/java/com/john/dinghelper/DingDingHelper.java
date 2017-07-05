@@ -75,7 +75,7 @@ public class DingDingHelper {
         cal.set(Calendar.HOUR_OF_DAY, 8);
         //在53分基础上随机往后浮动5分钟以内
         Random random = new Random();
-        cal.set(Calendar.MINUTE, 55 + random.nextInt(2));
+        cal.set(Calendar.MINUTE, 58 + random.nextInt(2));
 
         //如果启动时时间已经过去， 启动时间定为明天
         if(cal.getTime().getTime() < System.currentTimeMillis()) {
