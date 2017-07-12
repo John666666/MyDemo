@@ -17,7 +17,7 @@
             android:id="@+id/et_play_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="相对于SD卡"
+            android:hint="相对于SD卡或者网络地址"
             />
     </LinearLayout>
 
@@ -55,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_back"
             android:layout_width="0dp"

@@ -17,7 +17,7 @@ import java.io.IOException;
 public class SimpleMediaPlayer extends Activity implements View.OnClickListener {
 
     private final static String TAG = "SimpleMediaPlayer";
-    
+
     private EditText mEtPath;
     private EditText mEtPosition;
     private TextView mTvDuration;
@@ -29,6 +29,7 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
     private Button btnForward;
     private Button btnJump;
     private MediaPlayer mediaPlayer;
+    private String lastUrl;
 
 
     @Override
@@ -87,10 +88,10 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
 
     private void back() {
         try {
-            if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 int position = mediaPlayer.getCurrentPosition();
                 position -= 5 * 1000;
-                if(position < 0) position = 0;
+                if (position < 0) position = 0;
                 mediaPlayer.seekTo(position);
             }
         } catch (Exception e) {
@@ -100,7 +101,7 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
 
     private void pause() {
         try {
-            if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.pause();
             }
         } catch (Exception e) {
@@ -110,21 +111,24 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
 
     private void stop() {
         try {
-            if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
+                mediaPlayer.release();
             }
         } catch (Exception e) {
             Log.e(TAG, "停止失败");
+        } finally {
+            mediaPlayer = null;
         }
     }
 
     private void forward() {
         try {
-            if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 int position = mediaPlayer.getCurrentPosition();
                 int duration = mediaPlayer.getDuration();
                 position += 5 * 1000;
-                if(duration != -1 && position > duration) position = duration;
+                if (duration != -1 && position > duration) position = duration;
                 mediaPlayer.seekTo(position);
             }
         } catch (Exception e) {
@@ -133,13 +137,13 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
     }
 
     private void setPosition() {
-        String s_position =  mEtPosition.getText().toString();
+        String s_position = mEtPosition.getText().toString();
         try {
             int position = Integer.parseInt(s_position) * 1000;
-            if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 int duration = mediaPlayer.getDuration();
-                if(duration != -1 && position > duration) position = duration;
-                if(position < 1) position = 0;
+                if (duration != -1 && position > duration) position = duration;
+                if (position < 1) position = 0;
                 mediaPlayer.seekTo(position);
             }
         } catch (Exception e) {
@@ -149,11 +153,20 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
 
     private void setPath() {
         String path = mEtPath.getText().toString();
-        Uri uri = Uri.parse("file:///sdcard/" + path);
+        if(path.equals(lastUrl) && mediaPlayer != null) {
+            mediaPlayer.start();
+            return;
+        }
+        lastUrl = path;
+        if (!path.startsWith("http")) {
+            path = "file:///sdcard/" + path;
+        }
+        Uri uri = Uri.parse(path);
         mediaPlayer.reset();
         try {
             mediaPlayer.setDataSource(this, uri);
         } catch (IOException e) {
+            Log.e(TAG, "播放失败", e);
             return;
         }
         mediaPlayer.prepareAsync();
@@ -180,7 +193,7 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
 
         mediaPlayer.setScreenOnWhilePlaying(true);
 
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 while (mediaPlayer != null) {
@@ -203,7 +216,7 @@ public class SimpleMediaPlayer extends Activity implements View.OnClickListener 
         int seconds = time / 1000;
         time -= seconds * 1000;
         int millseconds = time;
-        return minutes+"'"+seconds+"''"+millseconds+"'''";
+        return minutes + "'" + seconds + "''" + millseconds + "'''";
     }
 
 }
