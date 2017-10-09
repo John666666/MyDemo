@@ -19,6 +19,8 @@ public class MainActivity extends Activity  implements View.OnClickListener{
         findViewById(R.id.btn_mem_leak).setOnClickListener(this);
         findViewById(R.id.btn_to_take_picture).setOnClickListener(this);
         findViewById(R.id.btn_to_mediaPlayer).setOnClickListener(this);
+        findViewById(R.id.btn_to_event).setOnClickListener(this);
+        findViewById(R.id.btn_to_permission).setOnClickListener(this);
     }
 
     @Override
@@ -43,6 +45,14 @@ public class MainActivity extends Activity  implements View.OnClickListener{
                 break;
             case R.id.btn_to_mediaPlayer:
                 intent = new Intent(this, SimpleMediaPlayer.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_to_event:
+                intent = new Intent(this, EventDispatcherActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_to_permission:
+                intent = new Intent(this, ReadContactsActivity.class);
                 startActivity(intent);
                 break;
         }

@@ -11,6 +11,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".MyApplication"
@@ -33,6 +34,8 @@
         <activity android:name=".activity.TakePictureActivity" />
         <activity android:name=".activity.CustomTakePictureActivity" />
         <activity android:name=".activity.SimpleMediaPlayer" />
+        <activity android:name=".activity.EventDispatcherActivity" />
+        <activity android:name=".activity.ReadContactsActivity"></activity>
     </application>
 
 </manifest>
