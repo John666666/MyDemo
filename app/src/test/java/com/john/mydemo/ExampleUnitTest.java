@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void testFinal() {
+        final boolean ret;
+        ret = true;
+        assertEquals("应该是真才对", true, ret);
+    }
 }

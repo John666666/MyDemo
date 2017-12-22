@@ -8,6 +8,8 @@ import com.blankj.utilcode.utils.Utils;
 import com.john.mydemo.bean.DaoMaster;
 import com.john.mydemo.bean.DaoSession;
 import com.john.mydemo.db.ProductOpenHelper;
+import com.john.mydemo.event.listener.PowerKeyListener;
+import com.john.mydemo.event.observer.PowerKeyObserver;
 import com.squareup.leakcanary.LeakCanary;
 
 /**
@@ -38,6 +40,8 @@ public class MyApplication extends Application {
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "test_green");
         ProductOpenHelper helper = new ProductOpenHelper(this, "product_green");
         daoSession = new DaoMaster(helper.getWritableDb()).newSession();
+
+        new PowerKeyObserver(ctx, new PowerKeyListener()).startListen();
 
         LeakCanary.install(this);
     }

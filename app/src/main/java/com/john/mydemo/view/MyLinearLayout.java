@@ -12,9 +12,9 @@ import com.blankj.utilcode.utils.LogUtils;
  */
 
 public class MyLinearLayout extends LinearLayout {
-    
+
     private final static String TAG = "MyLinearLayout";
-    
+
     public MyLinearLayout(Context context) {
         super(context);
     }
@@ -29,8 +29,13 @@ public class MyLinearLayout extends LinearLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        LogUtils.i(TAG, "dispatchTouchEvent");
+        LogUtils.i(TAG, "dispatchTouchEvent: " + ev.toString());
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return super.onInterceptTouchEvent(ev);
     }
 
     @Override
